@@ -1,0 +1,39 @@
+<h2>Agregar Nuevo Producto</h2>
+
+<%= form_with url: "/productos", method: :post do |f| %>
+  <div>
+    <%= f.label :nombre, "Nombre del Producto:" %><br>
+    <%= f.text_field :nombre, required: true %>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= f.label :precio, "Precio ($):" %><br>
+    <%= f.number_field :precio, step: :any, required: true %>
+  </div>
+
+  <div style="margin-top: 15px;">
+    <%= f.submit "Guardar Producto" %>
+  </div>
+<% end %>
+
+<hr>
+
+<h2>Nuestros Productos en Base de Datos:</h2>
+
+<ul>
+  <% @productos.each do |producto| %>
+    <li style="margin-bottom: 15px; list-style-type: none; padding: 10px; border-bottom: 1px solid #eee;">
+      <strong><%= producto.nombre %></strong> - $<%= producto.precio %> | Stock: <span><%= producto.stock || 0 %></span>
+      
+      <div style="margin-top: 10px;">
+        <div style="display: inline-block; margin-right: 10px;">
+          <%= button_to "+1 Stock", sumar_stock_producto_path(producto), method: :post, class: "btn btn-primary" %>
+        </div>
+
+        <div style="display: inline-block;">
+          <%= button_to "Eliminar", eliminar_producto_path(producto), method: :delete, data: { turbo_confirm: "¿Estás seguro?" }, class: "btn btn-danger" %>
+        </div>
+      </div>
+    </li>
+  <% end %>
+</ul>
